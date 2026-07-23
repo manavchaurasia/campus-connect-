@@ -38,12 +38,21 @@ export default function App() {
 
       let u = savedUsers;
       if (!u) {
-        u = [{ name: "Parth Gupta", email: "parth.gupta@tcsc.edu.in", password: "campus123", roll: "261777", dept: "B.Sc. IT — TY", role: "student", bio: "Full-stack builder. Java/Spring Boot + React. Exploring cloud & DevOps.", skills: ["Java", "Spring Boot", "React", "MySQL", "REST APIs", "Docker"] }];
+        u = [
+          { name: "Parth Gupta", email: "parth.gupta@tcsc.edu.in", password: "campus123", roll: "261777", dept: "B.Sc. IT — TY", role: "student", bio: "Full-stack builder. Java/Spring Boot + React. Exploring cloud & DevOps.", skills: ["Java", "Spring Boot", "React", "MySQL", "REST APIs", "Docker"] },
+          { name: "Campus Admin", email: "admin@tcsc.edu.in", password: "admin123", roll: "ADM001", dept: "System Administration", role: "admin", bio: "", skills: [] },
+        ];
+        await storageSet("cc_users", u);
+      }
+      if (!u.some((x) => x.role === "admin")) {
+        u = [...u, { name: "Campus Admin", email: "admin@tcsc.edu.in", password: "admin123", roll: "ADM001", dept: "System Administration", role: "admin", bio: "", skills: [] }];
         await storageSet("cc_users", u);
       }
       setUsers(u);
 
       const d = savedData || seedData();
+      if (d.moderationQueue === undefined) d.moderationQueue = seedData().moderationQueue;
+      if (d.flaggedUsers === undefined) d.flaggedUsers = [];
       setData(d);
       if (!savedData) await storageSet("cc_data", d);
 
@@ -96,6 +105,11 @@ export default function App() {
     setMe(updated);
     persistUsers(users.map((u) => (u.email === me.email ? updated : u)));
   }
+  function deleteUser(email) {
+    if (email === me.email) { toast("You can't remove your own account."); return; }
+    persistUsers(users.filter((u) => u.email !== email));
+    toast("Account removed.");
+  }
   function logout() { setSession(null); setMe(null); storageSet("cc_session", null); setAuthStep("login"); setView("login"); }
 
   const wrap = (child) => <div className={`cc-root${theme === "dark" ? " theme-dark" : ""}`} style={{ minHeight: "100vh", width: "100%" }}><GlobalStyle />{child}</div>;
@@ -105,5 +119,5 @@ export default function App() {
   if (!session || view === "login" || view === "register" || view === "forgot") {
     return wrap(<AuthShell authStep={authStep} setAuthStep={setAuthStep} onLogin={handleLogin} onRegister={handleRegister} toast={toast} toasts={toasts} theme={theme} toggleTheme={toggleTheme} />);
   }
-  return wrap(<MainApp me={me} updateMe={updateMe} role={role} setRole={setRole} data={data} persistData={persistData} logout={logout} toast={toast} toasts={toasts} theme={theme} toggleTheme={toggleTheme} />);
+  return wrap(<MainApp me={me} updateMe={updateMe} role={role} setRole={setRole} data={data} persistData={persistData} logout={logout} toast={toast} toasts={toasts} theme={theme} toggleTheme={toggleTheme} users={users} deleteUser={deleteUser} />);
 }

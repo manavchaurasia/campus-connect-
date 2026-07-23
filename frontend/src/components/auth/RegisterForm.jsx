@@ -20,8 +20,9 @@ export default function RegisterForm({ onRegister, setAuthStep }) {
         <div style={{ flex: 1 }}>
           <label className="cc-label">Role</label>
           <select className="cc-input" style={{ marginTop: 5 }} value={form.role} onChange={(e) => set("role", e.target.value)}>
-            {Object.entries(ROLE_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+            {Object.entries(ROLE_META).filter(([k]) => k !== "admin").map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
+          <p style={{ fontSize: 10.5, color: "var(--slate)", marginTop: 4 }}>Admin accounts are provisioned by the college, not self-registered.</p>
         </div>
       </div>
       <div style={{ marginTop: 12 }}><label className="cc-label">Password</label><input required type="password" className="cc-input" style={{ marginTop: 5 }} placeholder="Create a password" value={form.password} onChange={(e) => set("password", e.target.value)} /></div>

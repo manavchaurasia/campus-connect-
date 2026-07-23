@@ -73,6 +73,12 @@ export function seedData() {
       { id: uid(), text: "Your Skill Discovery profile was viewed by Placement Cell.", time: "3h ago", unread: true },
       { id: uid(), text: "RoboWars 2026 registration closes in 8 days.", time: "5h ago", unread: false },
     ],
+    moderationQueue: [
+      { id: uid(), text: "Marketplace listing reported as spam" },
+      { id: uid(), text: "Lost & Found duplicate entry" },
+      { id: uid(), text: "Post flagged: inappropriate language" },
+    ],
+    flaggedUsers: [],
     settings: {
       notifEvents: true, notifPlacement: true, notifFaculty: true, notifDM: true, notifMarket: true,
       privPortfolio: true, privEmail: false, privClubDM: true,

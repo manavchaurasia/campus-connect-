@@ -21,6 +21,7 @@ export default function LoginForm({ onLogin, setAuthStep }) {
       </div>
       <button className="btn-cc-primary" style={{ width: "100%", marginTop: 18 }}>Sign in</button>
       <p style={{ fontSize: 11.5, textAlign: "center", color: "var(--slate)", marginTop: 12 }}>Demo account pre-filled — or create your own below.</p>
+      <p style={{ fontSize: 11.5, textAlign: "center", color: "var(--slate)", marginTop: 4 }}>Admin demo login: <span className="font-mono">admin@tcsc.edu.in</span> / <span className="font-mono">admin123</span></p>
       <p style={{ fontSize: 13.5, textAlign: "center", marginTop: 16 }}>New here? <a href="#" onClick={(e) => { e.preventDefault(); setAuthStep("register"); }} style={{ fontWeight: 700, color: "var(--marigold-d)" }}>Create an account</a></p>
     </form>
   );

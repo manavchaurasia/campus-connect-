@@ -5,7 +5,7 @@ import {
 import SectionHead from "../shared/SectionHead";
 import { ROLE_META } from "../../constants";
 
-export default function SettingsView({ data, persistData, role, setRole, logout, setView, theme, toggleTheme }) {
+export default function SettingsView({ me, data, persistData, role, setRole, logout, setView, theme, toggleTheme }) {
   function toggle(key) { persistData((d) => ({ ...d, settings: { ...d.settings, [key]: !d.settings[key] } })); }
   const notifRows = [["notifEvents", "Event reminders"], ["notifPlacement", "Placement alerts"], ["notifFaculty", "Faculty announcements"], ["notifDM", "Direct messages"], ["notifMarket", "Marketplace activity"]];
   const privRows = [["privPortfolio", "Show my portfolio to Placement Cell"], ["privEmail", "Show my email on profile"], ["privClubDM", "Allow direct messages from Clubs"]];
@@ -46,10 +46,13 @@ export default function SettingsView({ data, persistData, role, setRole, logout,
           <h3 className="font-display" style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Preview as role</h3>
           <p style={{ fontSize: 11.5, color: "var(--slate)", marginBottom: 10 }}>View-only preview for your demo — doesn't change your account.</p>
           <div className="cc-grid-4">
-            {Object.entries(ROLE_META).map(([k, v]) => (
+            {Object.entries(ROLE_META).filter(([k]) => k !== "admin" || me.role === "admin").map(([k, v]) => (
               <button key={k} className={role === k ? "btn-cc-primary" : "btn-cc-ghost"} onClick={() => { setRole(k); setView("home"); }}>{v.label}</button>
             ))}
           </div>
+          {me.role !== "admin" && (
+            <p style={{ fontSize: 10.5, color: "var(--slate)", marginTop: 8 }}>The Admin dashboard is restricted to accounts provisioned as Admin.</p>
+          )}
           <button className="btn-cc-danger" style={{ width: "100%", marginTop: 14 }} onClick={logout}>Log out</button>
         </div>
       </div>
